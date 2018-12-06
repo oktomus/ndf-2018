@@ -15,6 +15,10 @@
 	height: 100%;
 }
 
+#dashboard #header #title {
+	text-align: center;
+}
+
 #dashboard #navigation #title {
 	text-align: center;
 	margin: 0 auto;
