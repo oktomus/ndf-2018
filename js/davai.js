@@ -33,9 +33,10 @@ var renderer	= new THREE.WebGLRenderer({
 	alpha		: true,
 });
 
+var webglcontent = document.getElementById('webglcontent');
 renderer.autoClear	= false;
 renderer.setSize( window.innerWidth, window.innerHeight );
-document.body.appendChild( renderer.domElement );
+webglcontent.appendChild(renderer.domElement);
 
 var updateFcts	= [];
 var scene	= new THREE.Scene();
@@ -69,7 +70,7 @@ css3dElement.style.position	= 'absolute'
 css3dElement.style.top		= '0px'
 css3dElement.style.width	= '100%'
 css3dElement.style.height	= '100%'
-document.body.appendChild( css3dElement )
+webglcontent.appendChild(css3dElement);
 
 var webglCanvas			= rendererWebgl.domElement
 webglCanvas.style.position	= 'absolute'
@@ -77,7 +78,7 @@ webglCanvas.style.top		= '0px'
 webglCanvas.style.width		= '100%'
 webglCanvas.style.height	= '100%'
 webglCanvas.style.pointerEvents	= 'none'
-css3dElement.appendChild( webglCanvas )
+webglcontent.appendChild(webglCanvas);
 
 //////////////////////////////////////////////////////////////////////////////////
 //		create a Plane for THREEx.HtmlMixer				//
@@ -171,7 +172,8 @@ updateFcts.push(function(){
 //////////////////////////////////////////////////////////////////////////////////
 //		loop runner							//
 //////////////////////////////////////////////////////////////////////////////////
-	var lastTimeMsec= null
+var lastTimeMsec= null
+
 requestAnimationFrame(function animate(nowMsec){
 	// keep looping
 	requestAnimationFrame( animate );
