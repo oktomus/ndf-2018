@@ -1,57 +1,15 @@
-/*
-  __   __        __        
-|/  | /  | /  | /  | /     
-|   |(___|(   |(___|(      
-|   )|   ) \  )|   )|      
-|__/ |  /   \/ |  / |      
-                           
-  __   __        __        
-|/  | /  | /  | /  | /     
-|   |(___|(   |(___|(      
-|   )|   ) \  )|   )|      
-|__/ |  /   \/ |  / |      
-
- Nuit de l'info 2018. Donc pas ndf mais ndi. N'est-ce pas Kevin ?
-*/
-
-// ------------------------------------------------------
-// Gestion des évenements.
-// Parcequ'il faut bien s'en occuper de ces gilets jaunes.
-// ------------------------------------------------------
-
-var camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.01, 1000);
-var nb_pages = 3;
-var direction = -1;
-var camera_max_rotate = 0;
-
-// Dashboard : previous
-$( " #previous" ).click(function() {
-	//alert("Handler for .click() called.");
-	camera.rotation.y += 6.28318530718 / nb_pages;
-	if (camera.rotation.y > 6.28318530718) camera.rotation.y -= 6.28318530718;
-
-});
-
-// Dashboard : next
-$( " #navigation" ).click(function() {
-	//alert("Handler for .click() called.");
-	camera.rotation.y -= 6.28318530718 / nb_pages;
-	if (camera.rotation.y < 0) camera.rotation.y += 6.28318530718;
-	console.log(camera.rotation.y)
-});
-
 var renderer	= new THREE.WebGLRenderer({
 	alpha		: true,
 });
 
-var webglcontent = document.getElementById('webglcontent');
 renderer.autoClear	= false;
 renderer.setSize( window.innerWidth, window.innerHeight );
-webglcontent.appendChild(renderer.domElement);
+document.body.appendChild( renderer.domElement );
 
 var updateFcts	= [];
 var scene	= new THREE.Scene();
-
+var camera	= new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.01, 1000 );
+camera.position.z = 0;
 
 //////////////////////////////////////////////////////////////////////////////////
 //		create THREEx.HtmlMixer						//
@@ -80,7 +38,7 @@ css3dElement.style.position	= 'absolute'
 css3dElement.style.top		= '0px'
 css3dElement.style.width	= '100%'
 css3dElement.style.height	= '100%'
-webglcontent.appendChild(css3dElement);
+document.body.appendChild( css3dElement )
 
 var webglCanvas			= rendererWebgl.domElement
 webglCanvas.style.position	= 'absolute'
@@ -88,7 +46,7 @@ webglCanvas.style.top		= '0px'
 webglCanvas.style.width		= '100%'
 webglCanvas.style.height	= '100%'
 webglCanvas.style.pointerEvents	= 'none'
-webglcontent.appendChild(webglCanvas);
+css3dElement.appendChild( webglCanvas )
 
 //////////////////////////////////////////////////////////////////////////////////
 //		create a Plane for THREEx.HtmlMixer				//
@@ -96,33 +54,47 @@ webglcontent.appendChild(webglCanvas);
 	// create the iframe element
 	// Creation des plans des pages web.
 	//
-function addPageWeb(link, page_nb, out_of) {
+function addPageWeb(link, nb, outOf) {
 	var url		= link;
 	var domElement	= document.createElement('iframe')
 	domElement.src	= url
 	domElement.style.border	= 'none'
 
 	// create the plane
-	var mixerPlane	= new THREEx.HtmlMixer.Plane(mixerContext, domElement)
-	mixerPlane.object3d.scale.multiplyScalar(2)
-
+	var mixerPlane = new THREEx.HtmlMixer.Plane(mixerContext, domElement);
+	mixerPlane.object3d.scale.multiplyScalar(2);
 	var parent = new THREE.Object3D();
 	scene.add(parent)
 
-	parent.rotation.y = page_nb * 6.28 / out_of;
+	parent.rotation.y = nb * 6.28 / outOf;
 	parent.add(mixerPlane.object3d);
-	parent.children[0].position.z = -2.5;
-	console.log(parent);
+	parent.children[0].position.z = -2.0;
 
+	console.log(parent.rotation.y);
 	return parent;
 }
 
-mainpage = addPageWeb('index_backup.html', 0, nb_pages);
-page2 = addPageWeb('index_backup.html', 1, nb_pages);
-pageLeft = addPageWeb('index_backup.html', 2, nb_pages);
+mainpage = addPageWeb('index_backup.html', 0, 3);
+console.log(mainpage)
+page2 = addPageWeb('index_backup.html', 1, 3);
+pageLeft = addPageWeb('index_backup.html', 2, 3);
 //console.log(page2);
-//page2.object3d.position.x = 2.1;
-//pageLeft.object3d.position.x = -2.1;
+//page2.rotation.y = 30;
+//page2.children[0].position.z = -2;
+//////page2.object3d.position.z = -2.1;
+//////page2.center(camera.position);
+//////page2.setPivotPoint(new Three.Vector3(0, 0, 0));
+//////page2.object3d.rotation.y = 9;
+//pageLeft.rotation.y = -30;
+//pageLeft.children[0].position.z = -2;
+//pageLeft.children[0].geometry.applyMatrix(new THREE.Matrix4().setTranslation(0, 0, -1));
+//pageLeft.children[0].rotation.y = -10;
+
+
+updateFcts.push(function(delta, now){
+	camera.rotation.y = now;
+})
+
 
 //////////////////////////////////////////////////////////////////////////////////
 //		Make it move							//
@@ -190,21 +162,16 @@ updateFcts.push(function(){
 //////////////////////////////////////////////////////////////////////////////////
 //		loop runner							//
 //////////////////////////////////////////////////////////////////////////////////
-var lastTimeMsec= null
-
+	var lastTimeMsec= null
 requestAnimationFrame(function animate(nowMsec){
 	// keep looping
 	requestAnimationFrame( animate );
 	// measure time
 	lastTimeMsec	= lastTimeMsec || nowMsec-1000/60
 	var deltaMsec	= Math.min(200, nowMsec - lastTimeMsec)
-	lastTimeMsec = nowMsec
-
-	//animation de la camera
-
+	lastTimeMsec	= nowMsec
 	// call each update function
 	updateFcts.forEach(function(updateFn){
 		updateFn(deltaMsec/1000, nowMsec/1000)
 	})
-
 })
