@@ -1,3 +1,34 @@
+/*
+  __   __        __        
+|/  | /  | /  | /  | /     
+|   |(___|(   |(___|(      
+|   )|   ) \  )|   )|      
+|__/ |  /   \/ |  / |      
+                           
+  __   __        __        
+|/  | /  | /  | /  | /     
+|   |(___|(   |(___|(      
+|   )|   ) \  )|   )|      
+|__/ |  /   \/ |  / |      
+
+ Nuit de l'info 2018. Donc pas ndf mais ndi. N'est-ce pas Kevin ?
+*/
+
+// ------------------------------------------------------
+// Gestion des évenements.
+// Parcequ'il faut bien s'en occuper de ces gilets jaunes.
+// ------------------------------------------------------
+
+// Dashboard : previous
+$( " #previous" ).click(function() {
+	alert( "Handler for .click() called." );
+});
+
+// Dashboard : next
+$( " #navigation" ).click(function() {
+	alert( "Handler for .click() called." );
+});
+
 var renderer	= new THREE.WebGLRenderer({
 	alpha		: true,
 });
