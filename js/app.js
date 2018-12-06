@@ -20,12 +20,12 @@ animate();
 
 function init() {
 
-	container = document.getElementById( 'container' );
+	container = document.getElementById( 'webGLContainer' );
 
 	camera = new THREE.PerspectiveCamera( 60, window.innerWidth / window.innerHeight, 1, 20000 );
 
 	scene = new THREE.Scene();
-	scene.background = new THREE.Color( 0xbfd1e5 );
+	scene.background = new THREE.Color( 0xe3e7ea );
 
 	controls = new THREE.FirstPersonControls( camera );
 	controls.movementSpeed = 1000;
