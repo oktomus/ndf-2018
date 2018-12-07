@@ -25,16 +25,17 @@ var direction = -1;
 var camera_max_rotate = 0;
 
 // Dashboard : previous
-$( "#previous" ).click(function() {
-	//alert("Handler for .click() called.");
+$( "#navigation #previous" ).click(function() {
+	console.log("previous!!");
 	camera_max_rotate -= 6.28318530718 / nb_pages;
 	if (camera_max_rotate < 0) camera_max_rotate += 6.28318530718;
 	direction = 1;
 });
 
 // Dashboard : next
-$( " #navigation" ).click(function() {
+$( " #navigation #next" ).click(function() {
 	//alert("Handler for .click() called.");
+	console.log("next!!");
 	camera_max_rotate += 6.28318530718 / nb_pages;
 	if (camera_max_rotate > 6.28318530718) camera_max_rotate -= 6.28318530718;
 	//console.log(camera_max_rotate)

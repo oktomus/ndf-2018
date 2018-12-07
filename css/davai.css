@@ -13,7 +13,7 @@
 }
 
 #navigation #title {
-	z-index: 10;
+	z-index: 5;
 	position: absolute;
 	text-align: center;
 	margin: 0 auto;
