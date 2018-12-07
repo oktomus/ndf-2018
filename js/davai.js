@@ -162,6 +162,35 @@ scene.add( mesh );
 //		Camera Controls							//
 //////////////////////////////////////////////////////////////////////////////////
 	//var controls	= new THREE.OrbitControls(camera)
+	//
+
+// Add a sun.
+sky = new THREE.Sky();
+sky.scale.setScalar( 450000 );
+scene.add( sky );
+// Add Sun Helper
+sunSphere = new THREE.Mesh(
+	new THREE.SphereBufferGeometry( 20000, 16, 8 ),
+	new THREE.MeshBasicMaterial( { color: 0xffffff } )
+);
+sunSphere.position.y = - 700000;
+sunSphere.visible = false;
+scene.add( sunSphere );
+
+var uniforms = sky.material.uniforms;
+uniforms.turbidity.value = 20.0;
+uniforms.rayleigh.value = 3.1;
+uniforms.luminance.value = 0.5;
+uniforms.mieCoefficient.value = 0.1;
+uniforms.mieDirectionalG.value = 0.8;
+var theta = Math.PI * ( 0.36 - 0.5 );
+var phi = 2 * Math.PI * ( 0.18 - 0.5 );
+var distance = 400000;
+sunSphere.position.x = distance * Math.cos( phi );
+sunSphere.position.y = distance * Math.sin( phi ) * Math.sin( theta );
+sunSphere.position.z = distance * Math.sin( phi ) * Math.cos( theta );
+sunSphere.visible = true;
+uniforms.sunPosition.value.copy( sunSphere.position );
 
 //////////////////////////////////////////////////////////////////////////////////
 //		handle resize							//
