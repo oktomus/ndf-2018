@@ -25,19 +25,21 @@ var direction = -1;
 var camera_max_rotate = 0;
 
 // Dashboard : previous
-$( " #previous" ).click(function() {
-	//alert("Handler for .click() called.");
-	camera_max_rotate += 6.28318530718 / nb_pages;
-	if (camera_max_rotate > 6.28318530718) camera_max_rotate -= 6.28318530718;
-
+$( "#navigation #previous" ).click(function() {
+	console.log("previous!!");
+	camera_max_rotate -= 6.28318530718 / nb_pages;
+	if (camera_max_rotate < 0) camera_max_rotate += 6.28318530718;
+	direction = 1;
 });
 
 // Dashboard : next
-$( " #navigation" ).click(function() {
+$( " #navigation #next" ).click(function() {
 	//alert("Handler for .click() called.");
-	camera_max_rotate -= 6.28318530718 / nb_pages;
-	if (camera_max_rotate < 0) camera_max_rotate += 6.28318530718;
-	console.log(camera_max_rotate)
+	console.log("next!!");
+	camera_max_rotate += 6.28318530718 / nb_pages;
+	if (camera_max_rotate > 6.28318530718) camera_max_rotate -= 6.28318530718;
+	//console.log(camera_max_rotate)
+	direction = -1;
 });
 
 var renderer	= new THREE.WebGLRenderer({
@@ -118,8 +120,8 @@ function addPageWeb(link, page_nb, out_of) {
 }
 
 mainpage = addPageWeb('index_backup.html', 0, nb_pages);
-page1 = addPageWeb('index_backup.html', 1, nb_pages);
-page2 = addPageWeb('index_backup.html', 2, nb_pages);
+page1 = addPageWeb('modules/DangerRSS.html', 1, nb_pages);
+page2 = addPageWeb('modules/weathermap.html', 2, nb_pages);
 page2 = addPageWeb('index_backup.html', 3, nb_pages);
 page2 = addPageWeb('index_backup.html', 4, nb_pages);
 page2 = addPageWeb('index_backup.html', 5, nb_pages);
@@ -204,9 +206,11 @@ requestAnimationFrame(function animate(nowMsec){
 	lastTimeMsec = nowMsec
 
 	//animation de la camera
-	var espilon = 0.01;
+	var espilon = 0.05;
 	if (camera.rotation.y < camera_max_rotate - espilon || camera.rotation.y > camera_max_rotate + espilon) {
 		camera.rotation.y += direction * 0.001 * deltaMsec;
+		console.log(direction);
+		console.log(camera_max_rotate);
 		console.log(camera.rotation.y);
 		if (camera.rotation.y > 6.28318530718) camera.rotation.y -= 6.28318530718;
 		if (camera.rotation.y < 0) camera.rotation.y += 6.28318530718;
