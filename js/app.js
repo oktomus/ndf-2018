@@ -16,7 +16,6 @@ var worldWidth = 256, worldDepth = 256,
 var clock = new THREE.Clock();
 
 init();
-animate();
 
 function init() {
 
@@ -56,7 +55,6 @@ function init() {
 	renderer = new THREE.WebGLRenderer();
 	renderer.setPixelRatio( window.devicePixelRatio );
 	renderer.setSize( window.innerWidth, window.innerHeight );
-
 	container.appendChild( renderer.domElement );
 
 	//stats = new Stats();
@@ -169,17 +167,26 @@ function generateTexture( data, width, height ) {
 
 //
 
-function animate() {
+//function animate() {
 
-	requestAnimationFrame( animate );
-
-	render();
+	//requestAnimationFrame( animate );
 	//stats.update();
 
-}
+//}
 
-function render() {
-	controls.update( clock.getDelta() );
+var lastTimeMsec= null
+requestAnimationFrame(function animate(nowMsec){
+	// keep looping
+	requestAnimationFrame( animate );
+
+	lastTimeMsec	= lastTimeMsec || nowMsec-1000/60
+	var deltaMsec	= Math.min(200, nowMsec - lastTimeMsec)
+	lastTimeMsec = nowMsec
+	var delaa = deltaMsec/1000;
+	var now = nowMsec/1000;
+
+	camera.rotation.y = now * 0.2;
+
 	renderer.render( scene, camera );
-}
+});
 
