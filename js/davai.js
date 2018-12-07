@@ -23,23 +23,23 @@ var camera = new THREE.PerspectiveCamera(55, window.innerWidth / window.innerHei
 var nb_pages = 6;
 var direction = -1;
 var camera_max_rotate = 0;
-
+var animation_running = false;
 // Dashboard : previous
-$( "#navigation #previous" ).click(function() {
-	console.log("previous!!");
-	camera_max_rotate -= 6.28318530718 / nb_pages;
-	if (camera_max_rotate < 0) camera_max_rotate += 6.28318530718;
+$("#navigation #previous").click(function () {
+	if (animation_running) return;
+	camera_max_rotate += 6.28318530718 / nb_pages;
+	if (camera_max_rotate > 6.28318530718) camera_max_rotate -= 6.28318530718;
 	direction = 1;
+	animation_running = true;
 });
 
 // Dashboard : next
 $( " #navigation #next" ).click(function() {
-	//alert("Handler for .click() called.");
-	console.log("next!!");
-	camera_max_rotate += 6.28318530718 / nb_pages;
-	if (camera_max_rotate > 6.28318530718) camera_max_rotate -= 6.28318530718;
-	//console.log(camera_max_rotate)
+	if (animation_running) return;
+	camera_max_rotate -= 6.28318530718 / nb_pages;
+	if (camera_max_rotate < 0) camera_max_rotate += 6.28318530718;
 	direction = -1;
+	animation_running = true;
 });
 
 var renderer	= new THREE.WebGLRenderer({
@@ -243,6 +243,9 @@ requestAnimationFrame(function animate(nowMsec){
 		console.log(camera.rotation.y);
 		if (camera.rotation.y > 6.28318530718) camera.rotation.y -= 6.28318530718;
 		if (camera.rotation.y < 0) camera.rotation.y += 6.28318530718;
+	}
+	else {
+		if(animation_running) animation_running = false;
 	}
 	// call each update function
 	updateFcts.forEach(function(updateFn){
