@@ -54,6 +54,29 @@ webglcontent.appendChild(renderer.domElement);
 var updateFcts	= [];
 var scene	= new THREE.Scene();
 
+// Add wireframe thing.
+var geo = new THREE.IcosahedronBufferGeometry( 20, 1 );
+var geometry = new THREE.WireframeGeometry2( geo );
+matLine = new THREE.LineMaterial( {
+	color: 0xc6c9d1,
+	linewidth: 5.00, // in pixels
+	//resolution: w 
+	dashed: false
+} );
+matLine.opacity = 0.05;
+matLine.transparent = true;
+matLine.resolution.set( window.innerWidth, window.innerHeight ); 
+wireframe = new THREE.Wireframe( geometry, matLine );
+wireframe.computeLineDistances();
+wireframe.scale.set( 10.00, 10.00, 10.00 );
+scene.add( wireframe );
+
+
+updateFcts.push(function(delta, now){
+	wireframe.rotation.x = now * 0.01;
+	wireframe.rotation.y = Math.cos(now * 0.1);
+	wireframe.rotation.z = Math.sin(now * 0.1);
+})
 
 //////////////////////////////////////////////////////////////////////////////////
 //		create THREEx.HtmlMixer						//
@@ -158,6 +181,35 @@ scene.add( mesh );
 //		Camera Controls							//
 //////////////////////////////////////////////////////////////////////////////////
 	//var controls	= new THREE.OrbitControls(camera)
+	//
+
+// Add a sun.
+sky = new THREE.Sky();
+sky.scale.setScalar( 450000 );
+scene.add( sky );
+// Add Sun Helper
+sunSphere = new THREE.Mesh(
+	new THREE.SphereBufferGeometry( 20000, 16, 8 ),
+	new THREE.MeshBasicMaterial( { color: 0xffffff } )
+);
+sunSphere.position.y = - 700000;
+sunSphere.visible = false;
+scene.add( sunSphere );
+
+var uniforms = sky.material.uniforms;
+uniforms.turbidity.value = 20.0;
+uniforms.rayleigh.value = 3.1;
+uniforms.luminance.value = 0.5;
+uniforms.mieCoefficient.value = 0.1;
+uniforms.mieDirectionalG.value = 0.8;
+var theta = Math.PI * ( 0.36 - 0.5 );
+var phi = 2 * Math.PI * ( 0.18 - 0.5 );
+var distance = 400000;
+sunSphere.position.x = distance * Math.cos( phi );
+sunSphere.position.y = distance * Math.sin( phi ) * Math.sin( theta );
+sunSphere.position.z = distance * Math.sin( phi ) * Math.cos( theta );
+sunSphere.visible = true;
+uniforms.sunPosition.value.copy( sunSphere.position );
 
 //////////////////////////////////////////////////////////////////////////////////
 //		handle resize							//
@@ -169,6 +221,7 @@ scene.add( mesh );
 		// update the camera
 		camera.aspect	= window.innerWidth / window.innerHeight
 		camera.updateProjectionMatrix()		
+		matLine.resolution.set( innerWidth, innerHeight ); // resolution of the inset viewport
 	}
 
 window.addEventListener('resize', onResize, false)

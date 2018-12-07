@@ -9,6 +9,10 @@
 }
 
 #header #title {
+	z-index: 5;
+	position: absolute;
+	top: 0.1em;
+	width: 100%;
 	text-align: center;
 }
 
