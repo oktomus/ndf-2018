@@ -19,25 +19,25 @@
 // Parcequ'il faut bien s'en occuper de ces gilets jaunes.
 // ------------------------------------------------------
 
-var camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.01, 1000);
-var nb_pages = 3;
+var camera = new THREE.PerspectiveCamera(55, window.innerWidth / window.innerHeight, 0.01, 1000);
+var nb_pages = 6;
 var direction = -1;
 var camera_max_rotate = 0;
 
 // Dashboard : previous
 $( " #previous" ).click(function() {
 	//alert("Handler for .click() called.");
-	camera.rotation.y += 6.28318530718 / nb_pages;
-	if (camera.rotation.y > 6.28318530718) camera.rotation.y -= 6.28318530718;
+	camera_max_rotate += 6.28318530718 / nb_pages;
+	if (camera_max_rotate > 6.28318530718) camera_max_rotate -= 6.28318530718;
 
 });
 
 // Dashboard : next
 $( " #navigation" ).click(function() {
 	//alert("Handler for .click() called.");
-	camera.rotation.y -= 6.28318530718 / nb_pages;
-	if (camera.rotation.y < 0) camera.rotation.y += 6.28318530718;
-	console.log(camera.rotation.y)
+	camera_max_rotate -= 6.28318530718 / nb_pages;
+	if (camera_max_rotate < 0) camera_max_rotate += 6.28318530718;
+	console.log(camera_max_rotate)
 });
 
 var renderer	= new THREE.WebGLRenderer({
@@ -111,15 +111,18 @@ function addPageWeb(link, page_nb, out_of) {
 
 	parent.rotation.y = page_nb * 6.28 / out_of;
 	parent.add(mixerPlane.object3d);
-	parent.children[0].position.z = -2.5;
+	parent.children[0].position.z = -2;
 	console.log(parent);
 
 	return parent;
 }
 
 mainpage = addPageWeb('index_backup.html', 0, nb_pages);
-page2 = addPageWeb('index_backup.html', 1, nb_pages);
-pageLeft = addPageWeb('index_backup.html', 2, nb_pages);
+page1 = addPageWeb('index_backup.html', 1, nb_pages);
+page2 = addPageWeb('index_backup.html', 2, nb_pages);
+page2 = addPageWeb('index_backup.html', 3, nb_pages);
+page2 = addPageWeb('index_backup.html', 4, nb_pages);
+page2 = addPageWeb('index_backup.html', 5, nb_pages);
 //console.log(page2);
 //page2.object3d.position.x = 2.1;
 //pageLeft.object3d.position.x = -2.1;
@@ -201,7 +204,13 @@ requestAnimationFrame(function animate(nowMsec){
 	lastTimeMsec = nowMsec
 
 	//animation de la camera
-
+	var espilon = 0.01;
+	if (camera.rotation.y < camera_max_rotate - espilon || camera.rotation.y > camera_max_rotate + espilon) {
+		camera.rotation.y += direction * 0.001 * deltaMsec;
+		console.log(camera.rotation.y);
+		if (camera.rotation.y > 6.28318530718) camera.rotation.y -= 6.28318530718;
+		if (camera.rotation.y < 0) camera.rotation.y += 6.28318530718;
+	}
 	// call each update function
 	updateFcts.forEach(function(updateFn){
 		updateFn(deltaMsec/1000, nowMsec/1000)
