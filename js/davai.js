@@ -118,11 +118,11 @@ function addPageWeb(link, page_nb, out_of) {
 	return parent;
 }
 
-mainpage = addPageWeb('index_backup.html', 0, nb_pages);
-page2 = addPageWeb('modules/weathermap.html', 2, nb_pages);
-page1 = addPageWeb('modules/DangerRSS.html', 1, nb_pages);
-page3 = addPageWeb('index_backup.html', 3, nb_pages);
-page4 = addPageWeb('index_backup.html', 4, nb_pages);
+mainpage = addPageWeb('modules/terrain.html', 0, nb_pages);
+page2 = addPageWeb('modules/weathermap.html', 1, nb_pages);
+page1 = addPageWeb('modules/DangerRSS.html', 2, nb_pages);
+page3 = addPageWeb('modules/Weather_log.html', 3, nb_pages);
+page4 = addPageWeb('modules/Weather_log.html', 4, nb_pages);
 page5 = addPageWeb('modules/logbook.html', 5, nb_pages);
 
 //////////////////////////////////////////////////////////////////////////////////
