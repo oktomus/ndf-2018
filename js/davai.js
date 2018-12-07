@@ -54,6 +54,29 @@ webglcontent.appendChild(renderer.domElement);
 var updateFcts	= [];
 var scene	= new THREE.Scene();
 
+// Add wireframe thing.
+var geo = new THREE.IcosahedronBufferGeometry( 20, 1 );
+var geometry = new THREE.WireframeGeometry2( geo );
+matLine = new THREE.LineMaterial( {
+	color: 0xc6c9d1,
+	linewidth: 5.00, // in pixels
+	//resolution: w 
+	dashed: false
+} );
+matLine.opacity = 0.05;
+matLine.transparent = true;
+matLine.resolution.set( window.innerWidth, window.innerHeight ); 
+wireframe = new THREE.Wireframe( geometry, matLine );
+wireframe.computeLineDistances();
+wireframe.scale.set( 10.00, 10.00, 10.00 );
+scene.add( wireframe );
+
+
+updateFcts.push(function(delta, now){
+	wireframe.rotation.x = now * 0.01;
+	wireframe.rotation.y = Math.cos(now * 0.1);
+	wireframe.rotation.z = Math.sin(now * 0.1);
+})
 
 //////////////////////////////////////////////////////////////////////////////////
 //		create THREEx.HtmlMixer						//
@@ -202,6 +225,7 @@ uniforms.sunPosition.value.copy( sunSphere.position );
 		// update the camera
 		camera.aspect	= window.innerWidth / window.innerHeight
 		camera.updateProjectionMatrix()		
+		matLine.resolution.set( innerWidth, innerHeight ); // resolution of the inset viewport
 	}
 
 window.addEventListener('resize', onResize, false)
