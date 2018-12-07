@@ -137,20 +137,16 @@ function addPageWeb(link, page_nb, out_of) {
 	parent.rotation.y = page_nb * 6.28 / out_of;
 	parent.add(mixerPlane.object3d);
 	parent.children[0].position.z = -2;
-	console.log(parent);
 
 	return parent;
 }
 
-mainpage = addPageWeb('index_backup.html', 0, nb_pages);
-page1 = addPageWeb('modules/DangerRSS.html', 1, nb_pages);
-page2 = addPageWeb('modules/weathermap.html', 2, nb_pages);
-page2 = addPageWeb('index_backup.html', 3, nb_pages);
-page2 = addPageWeb('index_backup.html', 4, nb_pages);
-page2 = addPageWeb('index_backup.html', 5, nb_pages);
-//console.log(page2);
-//page2.object3d.position.x = 2.1;
-//pageLeft.object3d.position.x = -2.1;
+mainpage = addPageWeb('modules/terrain.html', 0, nb_pages);
+page2 = addPageWeb('modules/weathermap.html', 1, nb_pages);
+page1 = addPageWeb('modules/DangerRSS.html', 2, nb_pages);
+page3 = addPageWeb('modules/Weather_log.html', 3, nb_pages);
+page4 = addPageWeb('modules/Weather_log.html', 4, nb_pages);
+page5 = addPageWeb('modules/logbook.html', 5, nb_pages);
 
 //////////////////////////////////////////////////////////////////////////////////
 //		Make it move							//
@@ -259,17 +255,17 @@ requestAnimationFrame(function animate(nowMsec){
 	lastTimeMsec = nowMsec
 
 	//animation de la camera
-	var espilon = 0.05;
+	var espilon = 0.03;
 	if (camera.rotation.y < camera_max_rotate - espilon || camera.rotation.y > camera_max_rotate + espilon) {
 		camera.rotation.y += direction * 0.001 * deltaMsec;
-		console.log(direction);
-		console.log(camera_max_rotate);
-		console.log(camera.rotation.y);
 		if (camera.rotation.y > 6.28318530718) camera.rotation.y -= 6.28318530718;
 		if (camera.rotation.y < 0) camera.rotation.y += 6.28318530718;
 	}
 	else {
-		if(animation_running) animation_running = false;
+		if (animation_running) {
+			animation_running = false;
+			camera.rotation.y = camera_max_rotate;
+		}
 	}
 	// call each update function
 	updateFcts.forEach(function(updateFn){
